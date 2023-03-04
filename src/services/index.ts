@@ -1,6 +1,5 @@
-import { axiosInstance } from './instance';
-
-export const SEARCH_LIMIT = 10;
+import { axiosInstance } from '@/services/instance';
+import { SEARCH_LIMIT } from '@/services/constants';
 
 export const searchRepositories = ({ q, page }: { q: string; page: number }) => {
   return axiosInstance.get(`/search/repositories`, { params: { q, page, per_page: SEARCH_LIMIT } });

@@ -8,8 +8,8 @@ import IssueDetail from '@/screens/IssueDetail';
 export type RootStackParamList = {
   Home: undefined;
   Search: undefined;
-  RepoDetail: { id: string };
-  IssueDetail: { id: string };
+  RepoDetail: { repo: string; owner: string };
+  IssueDetail: { repo: string; owner: string; issue: number };
 };
 
 const Stack = createStackNavigator<RootStackParamList>();

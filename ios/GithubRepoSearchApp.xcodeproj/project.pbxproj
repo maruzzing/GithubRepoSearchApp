@@ -17,7 +17,6 @@
 		FA48F02C29B2FC8E0041A46A /* NotoSansKR-Bold.otf in Resources */ = {isa = PBXBuildFile; fileRef = FA48F02929B2FC8E0041A46A /* NotoSansKR-Bold.otf */; };
 		FA48F02D29B2FC8E0041A46A /* NotoSansKR-Medium.otf in Resources */ = {isa = PBXBuildFile; fileRef = FA48F02A29B2FC8E0041A46A /* NotoSansKR-Medium.otf */; };
 		FA48F02E29B2FC8E0041A46A /* NotoSansKR-Regular.otf in Resources */ = {isa = PBXBuildFile; fileRef = FA48F02B29B2FC8E0041A46A /* NotoSansKR-Regular.otf */; };
-		FA48F03029B2FD420041A46A /* Ionicons.ttf in Resources */ = {isa = PBXBuildFile; fileRef = FA48F02F29B2FD420041A46A /* Ionicons.ttf */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -264,7 +263,6 @@
 			files = (
 				FA48F02D29B2FC8E0041A46A /* NotoSansKR-Medium.otf in Resources */,
 				81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */,
-				FA48F03029B2FD420041A46A /* Ionicons.ttf in Resources */,
 				FA48F02C29B2FC8E0041A46A /* NotoSansKR-Bold.otf in Resources */,
 				13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */,
 				FA48F02E29B2FC8E0041A46A /* NotoSansKR-Regular.otf in Resources */,

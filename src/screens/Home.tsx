@@ -48,9 +48,9 @@ const EmptyMessageButton = styled(Button)`
   margin-top: ${props => props.theme.space.scale(2)}px;
 `;
 
-export type MovieScreenProps = StackScreenProps<RootStackParamList, 'Home'>;
+export type HomeScreenProps = StackScreenProps<RootStackParamList, 'Home'>;
 
-const Home = ({ navigation }: MovieScreenProps) => {
+const Home = ({ navigation }: HomeScreenProps) => {
   const { top: paddingTop, bottom: paddingBottom } = useSafeAreaInsets();
   const { data, loading, error } = useAppSelector((state: RootState) => state.repositories);
   const dispatch = useAppDispatch();
@@ -67,7 +67,6 @@ const Home = ({ navigation }: MovieScreenProps) => {
 
   return (
     <Container style={{ paddingTop }}>
-      <AppBar />
       <ContentScrollView contentContainerStyle={{ paddingHorizontal: 20, paddingBottom }}>
         <TitleSection>
           <PageTitle typography="title">Home</PageTitle>

@@ -30,6 +30,7 @@ const color = {
   mono1: '#323232',
   mono2: '#4E5968',
   mono3: '#B0B8C1',
+  line: '#ECEDEF',
 };
 
 const typography = {

@@ -1,10 +1,8 @@
-import { Pressable } from 'react-native';
+import React from 'react';
 import styled from 'styled-components/native';
-import Icon from 'react-native-vector-icons/Ionicons';
-import { useNavigation } from '@react-navigation/native';
 
 import Text from '@/components/common/Text';
-import React from 'react';
+import BackButton from '@/components/common/AppBar/BackButton';
 
 interface AppBarProps {
   title?: string;
@@ -46,21 +44,9 @@ const TextContainer = styled.View`
 const Title = styled(Text)``;
 
 const AppBar = ({ title, hasHistory = false, RightComponent }: AppBarProps) => {
-  const navigation = useNavigation();
-
-  const handlePressBack = () => {
-    navigation.goBack();
-  };
-
   return (
     <Container>
-      <Left>
-        {hasHistory && (
-          <Pressable onPress={handlePressBack}>
-            <Icon name="chevron-back" size={24} />
-          </Pressable>
-        )}
-      </Left>
+      <Left>{hasHistory && <BackButton />}</Left>
       <TextContainer>
         <Title allowFontScaling={false} typography="subtitle2" numberOfLines={1}>
           {title}

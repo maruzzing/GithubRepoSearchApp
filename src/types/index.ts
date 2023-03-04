@@ -1,8 +1,10 @@
 export type Repository = {
   id: number;
   name: string;
+  node_id: string;
   owner: {
     id: number;
+    node_id: string;
     login: string;
     avatar_url: string;
   };
