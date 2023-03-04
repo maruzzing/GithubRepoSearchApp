@@ -1,3 +1,4 @@
+import { useMemo } from 'react';
 import styled from 'styled-components/native';
 import Icon from 'react-native-vector-icons/Ionicons';
 
@@ -9,7 +10,6 @@ import type { Repository } from '@/types';
 
 import { RootState, useAppDispatch, useAppSelector } from '@/store';
 import { addRepository, removeRepository } from '@/store/reducers/repositorySlice';
-import { useMemo } from 'react';
 
 interface RepositoryItemProps extends TouchableHighlightProps {
   item: Repository;

@@ -20,7 +20,7 @@ export const updateSearchKeyword = createAsyncThunk<
   { state: { search: SearchState } }
 >('recentSearch/updateSearchKeyword', async ({ type, keyword }, { getState }) => {
   const { recentSearchKeywords: currentData } = getState().search;
-  const updatedData = currentData.filter(item => item === keyword);
+  const updatedData = currentData.filter(item => item !== keyword);
   if (type === 'add') updatedData.unshift(keyword);
   await AsyncStorage.setItem(STORE_KEY, JSON.stringify(updatedData));
   return updatedData;

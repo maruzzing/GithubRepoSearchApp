@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { forwardRef, useState, useRef, useImperativeHandle } from 'react';
 import { Pressable, NativeSyntheticEvent, TextInputSubmitEditingEventData } from 'react-native';
 import styled from 'styled-components/native';
 import Icon from 'react-native-vector-icons/Ionicons';
@@ -49,49 +49,59 @@ const ClearButtonContainer = styled.View`
   margin-left: ${props => props.theme.space.scale(1)}px;
 `;
 
-const SearchTextInput = ({ value: initialValue = '', onSubmit, onChangeText, ...props }: TextInputProps) => {
-  const [value, setValue] = useState(initialValue);
+export type SearchTextInputRef = { setValue: (q: string) => void };
 
-  const handleSubmit = ({ nativeEvent: { text } }: NativeSyntheticEvent<TextInputSubmitEditingEventData>) => {
-    onSubmit?.(text);
-  };
+const SearchTextInput = forwardRef<SearchTextInputRef, TextInputProps>(
+  ({ value: initialValue = '', onSubmit, onChangeText, ...props }, ref) => {
+    const [value, setValue] = useState(initialValue);
+    const inputRef = useRef<RNTextInput>(null);
 
-  const handleChangeText = (text: string) => {
-    setValue(text);
-    onChangeText?.(text);
-  };
+    useImperativeHandle(ref, () => ({
+      setValue,
+    }));
 
-  return (
-    <Container>
-      <StyledTextInput
-        autoCapitalize="none"
-        autoCorrect={false}
-        returnKeyLabel="검색"
-        returnKeyType="search"
-        multiline={false}
-        onSubmitEditing={handleSubmit}
-        onChangeText={handleChangeText}
-        value={value}
-        {...props}
-      />
-      <ClearButtonContainer>
-        {!!value ? (
-          <Pressable onPress={() => setValue('')} hitSlop={8}>
-            <ClearIcon name="close-circle" size={CLEAR_ICON_SIZE} />
-          </Pressable>
-        ) : (
-          <Rect />
-        )}
-      </ClearButtonContainer>
-      <SearchIconContainer
-        onPress={() => {
-          onSubmit?.(value);
-        }}
-        hitSlop={8}>
-        <SearchIcon name="search" size={20} />
-      </SearchIconContainer>
-    </Container>
-  );
-};
+    const handleSubmit = ({ nativeEvent: { text } }: NativeSyntheticEvent<TextInputSubmitEditingEventData>) => {
+      onSubmit?.(text);
+    };
+
+    const handleChangeText = (text: string) => {
+      setValue(text);
+      onChangeText?.(text);
+    };
+
+    return (
+      <Container>
+        <StyledTextInput
+          autoCapitalize="none"
+          autoCorrect={false}
+          returnKeyLabel="검색"
+          returnKeyType="search"
+          multiline={false}
+          onSubmitEditing={handleSubmit}
+          onChangeText={handleChangeText}
+          value={value}
+          ref={inputRef}
+          {...props}
+        />
+        <ClearButtonContainer>
+          {!!value ? (
+            <Pressable onPress={() => inputRef.current?.clear()} hitSlop={8}>
+              <ClearIcon name="close-circle" size={CLEAR_ICON_SIZE} />
+            </Pressable>
+          ) : (
+            <Rect />
+          )}
+        </ClearButtonContainer>
+        <SearchIconContainer
+          onPress={() => {
+            onSubmit?.(value);
+          }}
+          hitSlop={8}>
+          <SearchIcon name="search" size={20} />
+        </SearchIconContainer>
+      </Container>
+    );
+  },
+);
 
 export default SearchTextInput;

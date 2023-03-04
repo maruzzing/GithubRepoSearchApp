@@ -1,21 +1,17 @@
-import { useCallback } from 'react';
-import { FlatList } from 'react-native';
+import { useCallback, useRef, useState } from 'react';
+import { Platform } from 'react-native';
 import styled from 'styled-components/native';
 import { StackScreenProps } from '@react-navigation/stack';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { RootStackParamList } from '@/navigation/RootNavigation';
 
-import SearchTextInput from '@/components/common/SearchTextInput';
+import SearchTextInput, { SearchTextInputRef } from '@/components/common/SearchTextInput';
 import BackButton from '@/components/common/AppBar/BackButton';
-import RepositoryItem from '@/components/RepositoryItem';
-import Spinner from '@/components/common/Spinner';
-import Divider from '@/components/common/Divider';
+import SearchResult, { SearchResultRef } from '@/components/search/SearchResult';
+import RecentKeywords from '@/components/search/RecentKeywords';
 
-import useInfiniteFetchApi from '@/hooks/useInfiniteFetchApi';
-
-import { Repository } from '@/types';
-
-import { SEARCH_LIMIT } from '@/services/constants';
+import { useAppDispatch } from '@/store';
+import { updateSearchKeyword } from '@/store/reducers/searchSlice';
 
 const Container = styled.KeyboardAvoidingView`
   flex: 1;
@@ -37,72 +33,43 @@ const StyledBackButton = styled(BackButton)`
   margin-right: ${props => props.theme.space.scale(1)}px;
 `;
 
-const StyledSpinner = styled(Spinner)`
-  position: absolute;
-  left: 0;
-  right: 0;
-  top: 0;
-  bottom: 0;
-`;
-
-const NextPageSpinner = styled(Spinner)`
-  margin-vertical: ${props => props.theme.space.scale(2)}px;
-`;
-
 export type SearchScreenProps = StackScreenProps<RootStackParamList, 'Search'>;
 
-const SEARCH_API_CONFIG = {
-  url: '/search/repositories',
-  params: {
-    per_page: SEARCH_LIMIT,
-  },
-};
+const Search = () => {
+  const { top: paddingTop } = useSafeAreaInsets();
+  const dispatch = useAppDispatch();
 
-const Search = ({ navigation }: SearchScreenProps) => {
-  const { top: paddingTop, bottom: paddingBottom } = useSafeAreaInsets();
+  const searchResultViewRef = useRef<SearchResultRef>(null);
+  const searchInputRef = useRef<SearchTextInputRef>(null);
 
-  const { state, setApiConfig, fetchNextPage } = useInfiniteFetchApi({
-    formatData: (d: { items: Repository; total_count: number }) => ({ data: d.items, count: d.total_count }),
-  });
+  const [searched, setSearched] = useState(false);
 
-  const renderItem = useCallback(({ item }: { item: Repository }) => {
-    return (
-      <RepositoryItem
-        onPress={() => navigation.navigate('RepoDetail', { repo: item.name, owner: item.owner.login })}
-        item={item}
-      />
-    );
+  const handleSearch = useCallback((q: string) => {
+    setSearched(true);
+    searchResultViewRef.current?.search(q);
+    searchInputRef.current?.setValue(q);
+    dispatch(updateSearchKeyword({ type: 'add', keyword: q }));
   }, []);
 
-  const handleSearch = (q: string) => {
+  const onSubmit = useCallback((q: string) => {
     q = q.trim();
     if (!q) return;
-    setApiConfig({ ...SEARCH_API_CONFIG, params: { ...SEARCH_API_CONFIG.params, q, page: 1 } });
-  };
+    handleSearch(q);
+  }, []);
 
-  const ListFooterComponent = () => {
-    if (state.loadingNextPage) return <NextPageSpinner />;
-    return null;
-  };
+  const handleChangeText = useCallback(() => {
+    if (searched) setSearched(!searched);
+  }, [searched]);
 
   return (
-    <Container style={{ paddingTop }}>
+    <Container style={{ paddingTop }} behavior={Platform.OS === 'ios' ? 'padding' : undefined}>
       <SearchContainer>
         <StyledBackButton />
         <InputContainer pointerEvents="box-none">
-          <SearchTextInput onSubmit={handleSearch} />
+          <SearchTextInput onSubmit={onSubmit} autoFocus onChangeText={handleChangeText} ref={searchInputRef} />
         </InputContainer>
       </SearchContainer>
-      <FlatList
-        contentContainerStyle={{ flexGrow: 1, paddingBottom }}
-        data={state.data}
-        renderItem={renderItem}
-        keyExtractor={(item: Repository, idx: number) => item.node_id + '-' + idx}
-        onEndReached={fetchNextPage}
-        ListFooterComponent={ListFooterComponent}
-        ItemSeparatorComponent={Divider}
-      />
-      {state.loading && <StyledSpinner />}
+      {searched ? <SearchResult ref={searchResultViewRef} /> : <RecentKeywords onPressItem={handleSearch} />}
     </Container>
   );
 };
