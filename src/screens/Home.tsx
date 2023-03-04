@@ -1,20 +1,23 @@
-import { useCallback, useEffect } from 'react';
+import { Fragment, useCallback, useEffect } from 'react';
 import { View, Pressable } from 'react-native';
 import styled from 'styled-components/native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { StackScreenProps } from '@react-navigation/stack';
 
-import AppBar from '@/components/common/AppBar';
 import Text from '@/components/common/Text';
 import SearchTextInput from '@/components/common/SearchTextInput';
 import Spinner from '@/components/common/Spinner';
 import Card from '@/components/common/Card';
 import Button from '@/components/common/Button';
+import Divider from '@/components/common/Divider';
+import RepositoryItem from '@/components/RepositoryItem';
 
 import { RootStackParamList } from '@/navigation/RootNavigation';
 
 import { RootState, useAppDispatch, useAppSelector } from '@/store';
 import { getRepositories } from '@/store/reducers/repositorySlice';
+
+import { Repository } from '@/types';
 
 const Container = styled.View`
   flex: 1;
@@ -48,6 +51,11 @@ const EmptyMessageButton = styled(Button)`
   margin-top: ${props => props.theme.space.scale(2)}px;
 `;
 
+const RepositoryContainer = styled.View`
+  border-radius: ${props => props.theme.space.scale(1)}px;
+  overflow: hidden;
+`;
+
 export type HomeScreenProps = StackScreenProps<RootStackParamList, 'Home'>;
 
 const Home = ({ navigation }: HomeScreenProps) => {
@@ -59,7 +67,20 @@ const Home = ({ navigation }: HomeScreenProps) => {
     navigation.navigate('Search');
   };
 
-  const renderRepositories = useCallback(({}) => {}, []);
+  const renderItem = useCallback(
+    (item: Repository, index: number) => {
+      return (
+        <Fragment key={item.node_id}>
+          {!!index && <Divider />}
+          <RepositoryItem
+            onPress={() => navigation.navigate('RepoDetail', { repo: item.name, owner: item.owner.login })}
+            item={item}
+          />
+        </Fragment>
+      );
+    },
+    [data],
+  );
 
   useEffect(() => {
     dispatch(getRepositories());
@@ -78,10 +99,10 @@ const Home = ({ navigation }: HomeScreenProps) => {
         </TitleSection>
         <Subtitle typography="subtitle1">저장된 레포지토리</Subtitle>
         <View>
-          {loading ? (
+          {data.length ? (
+            <RepositoryContainer>{data.map(renderItem)}</RepositoryContainer>
+          ) : loading ? (
             <StyledSpinner />
-          ) : !!data.length ? (
-            data.map(renderRepositories)
           ) : (
             <EmptyMessageContainer>
               <Text typography="body1">저장된 레포지토리가 없어요</Text>

@@ -6,7 +6,7 @@ import Icon from 'react-native-vector-icons/Ionicons';
 import { TextInput as RNTextInput, TextInputProps as RNTextInputProps } from 'react-native';
 
 interface TextInputProps extends RNTextInputProps {
-  onSubmit: (value: string) => void;
+  onSubmit?: (value: string) => void;
 }
 
 const CLEAR_ICON_SIZE = 20;
@@ -53,7 +53,7 @@ const SearchTextInput = ({ value: initialValue = '', onSubmit, onChangeText, ...
   const [value, setValue] = useState(initialValue);
 
   const handleSubmit = ({ nativeEvent: { text } }: NativeSyntheticEvent<TextInputSubmitEditingEventData>) => {
-    onSubmit(text);
+    onSubmit?.(text);
   };
 
   const handleChangeText = (text: string) => {
@@ -85,7 +85,7 @@ const SearchTextInput = ({ value: initialValue = '', onSubmit, onChangeText, ...
       </ClearButtonContainer>
       <SearchIconContainer
         onPress={() => {
-          onSubmit(value);
+          onSubmit?.(value);
         }}
         hitSlop={8}>
         <SearchIcon name="search" size={20} />

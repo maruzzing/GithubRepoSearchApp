@@ -7,7 +7,7 @@ export interface TouchableHighlightProps extends RNTouchableHighlightProps {}
 
 const TouchableHighlight = ({ children, ...props }: TouchableHighlightProps) => {
   return (
-    <RNTouchableHighlight activeOpacity={0.97} underlayColor="rgba(0, 0, 0, 0.05)" {...props}>
+    <RNTouchableHighlight activeOpacity={0.97} underlayColor="rgba(0, 0, 0, 0.03)" {...props}>
       {children}
     </RNTouchableHighlight>
   );

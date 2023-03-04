@@ -1,4 +1,4 @@
-import { useCallback, useState } from 'react';
+import { useCallback } from 'react';
 import { FlatList } from 'react-native';
 import styled from 'styled-components/native';
 import { StackScreenProps } from '@react-navigation/stack';
@@ -69,10 +69,7 @@ const Search = ({ navigation }: SearchScreenProps) => {
     return (
       <RepositoryItem
         onPress={() => navigation.navigate('RepoDetail', { repo: item.name, owner: item.owner.login })}
-        name={item.name}
-        owner={item.owner}
-        description={item.description}
-        isBookmarked={false}
+        item={item}
       />
     );
   }, []);

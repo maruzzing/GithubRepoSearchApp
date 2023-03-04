@@ -22,7 +22,7 @@ const Profile = ({ size = 20, name, source, containerStyle }: ProfileProps) => {
   return (
     <Container style={containerStyle}>
       <StyledAvatar size={size} source={source} />
-      <Text typography="body2" color="mono2">
+      <Text typography="body2" color="mono2" numberOfLines={1}>
         {name}
       </Text>
     </Container>

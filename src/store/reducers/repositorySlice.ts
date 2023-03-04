@@ -1,5 +1,6 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { createSlice, createAsyncThunk, AnyAction, isAnyOf } from '@reduxjs/toolkit';
+import { Alert } from 'react-native';
 
 import type { Repository } from '@/types';
 
@@ -29,8 +30,14 @@ export const addRepository = createAsyncThunk<
   Repository,
   { state: { repositories: RepositoryState } }
 >('repositories/addRepository', async (data, { getState }) => {
-  const { data: currentData } = getState().repositories;
-  if (currentData.length >= STORAGE_MAX_LENGTH) return currentData;
+  const { data: currentData, loading } = getState().repositories;
+  if (loading) currentData;
+  if (currentData.length >= STORAGE_MAX_LENGTH) {
+    new Promise(resolve => {
+      Alert.alert(`보관은 ${4}개 까지 가능해요.`, '', [{ text: '확인', onPress: resolve }]);
+    });
+    return currentData;
+  }
   const updatedData = [...currentData, data];
   await AsyncStorage.setItem(STORE_KEY, JSON.stringify(updatedData));
   return updatedData;
@@ -41,8 +48,9 @@ export const removeRepository = createAsyncThunk<
   Repository,
   { state: { repositories: RepositoryState } }
 >('repositories/removeRepository', async (data, { getState }) => {
-  const { data: currentData } = getState().repositories;
-  const updatedData = currentData.filter(item => item.id === data.id);
+  const { data: currentData, loading } = getState().repositories;
+  if (loading) currentData;
+  const updatedData = currentData.filter(item => item.node_id !== data.node_id);
   await AsyncStorage.setItem(STORE_KEY, JSON.stringify(updatedData));
   return updatedData;
 });
