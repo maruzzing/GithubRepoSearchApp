@@ -8,6 +8,7 @@
 import React from 'react';
 import type { PropsWithChildren } from 'react';
 import { SafeAreaView, ScrollView, StatusBar, StyleSheet, Text, useColorScheme, View } from 'react-native';
+import styled, { css } from 'styled-components/native';
 
 import {
   Colors,
@@ -24,7 +25,7 @@ type SectionProps = PropsWithChildren<{
 function Section({ children, title }: SectionProps): JSX.Element {
   const isDarkMode = useColorScheme() === 'dark';
   return (
-    <View style={styles.sectionContainer}>
+    <SectionContainer style={styles.sectionContainer}>
       <Text
         style={[
           styles.sectionTitle,
@@ -43,7 +44,7 @@ function Section({ children, title }: SectionProps): JSX.Element {
         ]}>
         {children}
       </Text>
-    </View>
+    </SectionContainer>
   );
 }
 
@@ -83,6 +84,11 @@ function App(): JSX.Element {
     </SafeAreaView>
   );
 }
+
+const SectionContainer = styled.View`
+  margin-top: 32px;
+  padding-horizontal: 24px;
+`;
 
 const styles = StyleSheet.create({
   sectionContainer: {
