@@ -12,6 +12,7 @@ import { RootState, useAppDispatch, useAppSelector } from '@/store';
 import { updateSearchKeyword } from '@/store/reducers/searchSlice';
 
 const Title = styled(Text)`
+  margin-top: ${props => props.theme.space.scale(1)}px;
   margin-bottom: ${props => props.theme.space.scale(2)}px;
   margin-horizontal: ${props => props.theme.space.layout}px;
 `;
