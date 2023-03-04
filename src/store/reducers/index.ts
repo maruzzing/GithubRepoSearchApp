@@ -1,7 +1,7 @@
 import { combineReducers } from '@reduxjs/toolkit';
 
-import bookmarkSlice from '@/store/reducers/bookmarkSlice';
+import repositorySlice from '@/store/reducers/repositorySlice';
 
-export const rootReducer = combineReducers({ bookmark: bookmarkSlice });
+export const rootReducer = combineReducers({ repositories: repositorySlice });
 
 export type RootState = ReturnType<typeof rootReducer>;
