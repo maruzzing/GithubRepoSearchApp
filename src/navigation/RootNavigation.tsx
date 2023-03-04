@@ -1,15 +1,24 @@
 import { createStackNavigator } from '@react-navigation/stack';
 
-const Stack = createStackNavigator();
-
 import Home from '@/screens/Home';
+import Search from '@/screens/Search';
 import RepoDetail from '@/screens/RepoDetail';
 import IssueDetail from '@/screens/IssueDetail';
 
+export type RootStackParamList = {
+  Home: undefined;
+  Search: undefined;
+  RepoDetail: { id: string };
+  IssueDetail: { id: string };
+};
+
+const Stack = createStackNavigator<RootStackParamList>();
+
 function RootNavigation() {
   return (
-    <Stack.Navigator>
+    <Stack.Navigator screenOptions={{ headerShown: false }}>
       <Stack.Screen name="Home" component={Home} />
+      <Stack.Screen name="Search" component={Search} />
       <Stack.Screen name="RepoDetail" component={RepoDetail} />
       <Stack.Screen name="IssueDetail" component={IssueDetail} />
     </Stack.Navigator>

@@ -19,37 +19,38 @@ const color = {
 const typography = {
   title: css`
     font-size: 32px;
-    font-weight: 600;
+    font-family: NotoSansKR-Bold;
   `,
   subtitle1: css`
     font-size: 24px;
-    font-weight: 500;
+    font-family: NotoSansKR-Medium;
   `,
   subtitle2: css`
     font-size: 16px;
-    font-weight: 500;
+    font-family: NotoSansKR-Medium;
   `,
   body1: css`
     font-size: 16px;
-    font-weight: 400;
+    font-family: NotoSansKR-Regular;
   `,
   body2: css`
     font-size: 14px;
-    font-weight: 400;
+    font-family: NotoSansKR-Regular;
   `,
   caption: css`
     font-size: 12px;
-    font-weight: 400;
+    font-family: NotoSansKR-Regular;
   `,
   button: css`
     font-size: 14px;
-    font-weight: 500;
+    font-family: NotoSansKR-Medium;
   `,
 };
 
 export type SpaceType = typeof space;
 export type ColorType = typeof color;
 export type TypographyType = typeof typography;
+export type TypographyVariantsType = keyof TypographyType;
 
 const theme: DefaultTheme = {
   color,
