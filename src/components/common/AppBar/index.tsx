@@ -62,7 +62,7 @@ const AppBar = ({ title, hasHistory = false, RightComponent }: AppBarProps) => {
         )}
       </Left>
       <TextContainer>
-        <Title allowFontScaling={false} variants="subtitle2" numberOfLines={1}>
+        <Title allowFontScaling={false} typography="subtitle2" numberOfLines={1}>
           {title}
         </Title>
       </TextContainer>

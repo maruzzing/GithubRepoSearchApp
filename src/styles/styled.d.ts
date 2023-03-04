@@ -1,10 +1,11 @@
 import 'styled-components/native';
-import { SpaceType, ColorType, TypographyType } from '@/styles/theme';
+import type { SpaceType, ColorType, TypographyType, ElevationType } from '@/styles/theme';
 
 declare module 'styled-components/native' {
   export interface DefaultTheme {
     space: SpaceType;
     color: ColorType;
     typography: TypographyType;
+    elevation: ElevationType;
   }
 }
