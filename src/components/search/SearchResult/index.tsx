@@ -26,7 +26,7 @@ const SearchResult = forwardRef<SearchResultRef, { searched: boolean }>(({ searc
   const navigation = useNavigation<StackNavigationProp<RootStackParamList>>();
 
   const { state, setApiConfig, fetchNextPage } = useInfiniteFetchApi({
-    formatData: (d: { items: Array<Repository>; total_count: number }) => ({ data: d.items, count: d.total_count }),
+    formData: (d: { items: Array<Repository>; total_count: number }) => ({ data: d.items, count: d.total_count }),
   });
 
   useImperativeHandle(ref, () => ({

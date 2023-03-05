@@ -1,9 +1,34 @@
-import { useReducer, useEffect, useState, useRef } from 'react';
+import { useReducer, useEffect, useState } from 'react';
 import { axiosInstance } from '@/services/instance';
 
 import { PER_PAGE } from '@/services/constants';
+import { AxiosRequestConfig } from 'axios';
 
-const fetchReducer = (state: any, action: any) => {
+interface State<T> {
+  loading: boolean;
+  loadingNextPage: boolean;
+  error: boolean;
+  count: number;
+  data: Array<T>;
+}
+
+const initialState = {
+  loading: false,
+  loadingNextPage: false,
+  error: false,
+  count: 0,
+  data: [],
+};
+
+type Action<T> =
+  | { type: 'FETCH_INIT' | 'NEXT_PAGE_FETCH_INIT' }
+  | {
+      type: 'FETCH_SUCCESS' | 'NEXT_PAGE_FETCH_SUCCESS';
+      payload: Pick<State<T>, 'data'> & { count?: State<T>['count'] };
+    }
+  | { type: 'FETCH_FAILURE' };
+
+const fetchReducer = <T>(state: State<T>, action: Action<T>): State<T> => {
   switch (action.type) {
     case 'FETCH_INIT':
       return {
@@ -23,22 +48,28 @@ const fetchReducer = (state: any, action: any) => {
         count: 0,
       };
     case 'FETCH_SUCCESS':
-      return {
-        ...state,
-        data: action.payload.data,
-        loading: false,
-        loadingNextPage: false,
-        count: action.payload.count,
-      };
+      if (action.payload) {
+        return {
+          ...state,
+          data: action.payload.data,
+          loading: false,
+          loadingNextPage: false,
+          count: action.payload.count ?? action.payload.data.length,
+        };
+      }
+      return state;
     case 'NEXT_PAGE_FETCH_SUCCESS':
-      const result = [...state.data, ...action.payload.data];
-      return {
-        ...state,
-        data: result,
-        loading: false,
-        loadingNextPage: false,
-        count: action.payload.count ?? (action.payload.data.length ? result.length + 1 : state.data.length),
-      };
+      if (action.payload) {
+        const result = [...state.data, ...action.payload.data];
+        return {
+          ...state,
+          data: result,
+          loading: false,
+          loadingNextPage: false,
+          count: action.payload.count ?? (action.payload.data.length ? result.length + 1 : state.data.length),
+        };
+      }
+      return state;
     case 'FETCH_FAILURE':
       return {
         ...state,
@@ -46,33 +77,25 @@ const fetchReducer = (state: any, action: any) => {
         loadingNextPage: false,
         error: true,
       };
-    case 'RESET':
-      return {
-        ...state,
-        ...action.payload,
-      };
     default:
       return state;
   }
 };
 
-const initialState = {
-  loading: false,
-  loadingNextPage: false,
-  error: false,
-  count: 0,
-  data: [],
-};
-
-const useInfiniteFetchApi = ({ apiConfig: initialApiConfig, formatData }: any) => {
-  const [state, dispatch] = useReducer(fetchReducer, initialState);
+const useInfiniteFetchApi = <T>({
+  apiConfig: initialApiConfig = {},
+  formData,
+}: {
+  apiConfig?: AxiosRequestConfig;
+  formData: (d: any) => { data: Array<T>; count?: number };
+}): {
+  state: State<T>;
+  setApiConfig: React.Dispatch<React.SetStateAction<AxiosRequestConfig>>;
+  fetchNextPage: () => void;
+} => {
+  const [state, dispatch] = useReducer<React.Reducer<State<T>, Action<T>>>(fetchReducer, initialState);
 
   const [apiConfig, setApiConfig] = useState(initialApiConfig);
-
-  const reset = () => {
-    setApiConfig({});
-    dispatch({ type: 'RESET', payload: initialState });
-  };
 
   const fetchNextPage = async () => {
     if (!apiConfig || !apiConfig.url || state.count <= state.data.length || state.loadingNextPage || state.loading)
@@ -84,20 +107,20 @@ const useInfiniteFetchApi = ({ apiConfig: initialApiConfig, formatData }: any) =
         params: { ...apiConfig.params, page: Math.floor(state.data.length / PER_PAGE) + 1 },
       };
       const { data } = await axiosInstance(updatedApiConfig);
-      dispatch({ type: 'NEXT_PAGE_FETCH_SUCCESS', payload: { ...formatData(data) } });
+      dispatch({ type: 'NEXT_PAGE_FETCH_SUCCESS', payload: { ...formData(data) } });
     } catch (err) {
-      dispatch({ type: 'FETCH_FAILURE', payload: err });
+      dispatch({ type: 'FETCH_FAILURE' });
     }
   };
 
   const fetchData = async () => {
-    if (!apiConfig || !apiConfig.url || state.loadingNextPage || state.loading) return;
+    if (!apiConfig.url || state.loadingNextPage || state.loading) return;
     dispatch({ type: 'FETCH_INIT' });
     try {
       const { data } = await axiosInstance(apiConfig);
-      dispatch({ type: 'FETCH_SUCCESS', payload: formatData(data) });
+      dispatch({ type: 'FETCH_SUCCESS', payload: formData(data) });
     } catch (err) {
-      dispatch({ type: 'FETCH_FAILURE', payload: err });
+      dispatch({ type: 'FETCH_FAILURE' });
     }
   };
 
@@ -105,7 +128,7 @@ const useInfiniteFetchApi = ({ apiConfig: initialApiConfig, formatData }: any) =
     fetchData();
   }, [apiConfig]);
 
-  return { state, reset, setApiConfig, fetchNextPage };
+  return { state, setApiConfig, fetchNextPage };
 };
 
 export default useInfiniteFetchApi;

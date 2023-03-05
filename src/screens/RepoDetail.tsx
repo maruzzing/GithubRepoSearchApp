@@ -45,7 +45,7 @@ const RepoDetail = ({ route, navigation }: RepoDetailProps) => {
   );
 
   const { state, fetchNextPage } = useInfiniteFetchApi({
-    formatData: (d: Array<Issue>) => ({ data: d }),
+    formData: (d: Array<Issue>) => ({ data: d }),
     apiConfig: apiConfig,
   });
 
