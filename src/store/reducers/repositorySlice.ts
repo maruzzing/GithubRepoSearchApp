@@ -6,13 +6,13 @@ import type { Repository } from '@/types';
 
 const STORE_KEY = 'repositories';
 
-const STORAGE_MAX_LENGTH = 4;
+export const STORAGE_MAX_LENGTH = 4;
 
-interface RepositoryState {
+type RepositoryState = {
   error: boolean;
   loading: boolean;
   data: Array<Repository>;
-}
+};
 
 const initialState: RepositoryState = {
   loading: true,
@@ -32,12 +32,6 @@ export const addRepository = createAsyncThunk<
 >('repositories/addRepository', async (data, { getState }) => {
   const { data: currentData, loading } = getState().repositories;
   if (loading) currentData;
-  if (currentData.length >= STORAGE_MAX_LENGTH) {
-    new Promise(resolve => {
-      Alert.alert(`보관은 ${4}개 까지 가능해요`, '', [{ text: '확인', onPress: resolve }]);
-    });
-    return currentData;
-  }
   const updatedData = [...currentData, data];
   await AsyncStorage.setItem(STORE_KEY, JSON.stringify(updatedData));
   return updatedData;

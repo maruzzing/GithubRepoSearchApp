@@ -1,9 +1,9 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { createSlice, createAsyncThunk, isAnyOf } from '@reduxjs/toolkit';
 
-interface SearchState {
+type SearchState = {
   recentSearchKeywords: Array<string>;
-}
+};
 
 const initialState: SearchState = { recentSearchKeywords: [] };
 

@@ -10,7 +10,8 @@ import Icon from '@/components/common/Icon';
 import type { Repository } from '@/types';
 
 import { RootState, useAppDispatch, useAppSelector } from '@/store';
-import { addRepository, removeRepository } from '@/store/reducers/repositorySlice';
+import { addRepository, removeRepository, STORAGE_MAX_LENGTH } from '@/store/reducers/repositorySlice';
+import { setValue } from '@/store/reducers/bannerSlice';
 
 interface RepositoryItemProps extends TouchableHighlightProps {
   item: Repository;
@@ -49,6 +50,10 @@ const RepositoryItem = ({ item, isListItem = true, ...props }: RepositoryItemPro
   const isBookmarked = useMemo(() => data.some((d: Repository) => d.node_id === item.node_id), [data]);
 
   const handlePressBookmark = () => {
+    if (!isBookmarked && data.length === STORAGE_MAX_LENGTH) {
+      dispatch(setValue({ snackbarMessage: `보관은 ${STORAGE_MAX_LENGTH}개 까지 가능해요` }));
+      return;
+    }
     dispatch(isBookmarked ? removeRepository(item) : addRepository(item));
   };
 
