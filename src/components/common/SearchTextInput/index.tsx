@@ -37,7 +37,7 @@ const SearchIcon = styled(Icon)`
 `;
 
 const ClearIcon = styled(Icon)`
-  color: ${props => props.theme.color.mono3};
+  color: ${props => props.theme.color.mono4};
 `;
 
 const Rect = styled.View`

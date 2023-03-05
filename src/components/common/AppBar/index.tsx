@@ -4,7 +4,7 @@ import styled from 'styled-components/native';
 import Text from '@/components/common/Text';
 import BackButton from '@/components/common/AppBar/BackButton';
 
-interface AppBarProps {
+export interface AppBarProps {
   title?: string;
   hasHistory?: boolean;
   RightComponent?: React.ReactElement;

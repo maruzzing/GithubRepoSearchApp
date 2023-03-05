@@ -1,7 +1,7 @@
 import { useReducer, useEffect, useState, useRef } from 'react';
 import { axiosInstance } from '@/services/instance';
 
-import { SEARCH_LIMIT } from '@/services/constants';
+import { PER_PAGE } from '@/services/constants';
 
 const fetchReducer = (state: any, action: any) => {
   switch (action.type) {
@@ -31,12 +31,13 @@ const fetchReducer = (state: any, action: any) => {
         count: action.payload.count,
       };
     case 'NEXT_PAGE_FETCH_SUCCESS':
+      const result = [...state.data, ...action.payload.data];
       return {
         ...state,
-        data: [...state.data, ...action.payload.data],
+        data: result,
         loading: false,
         loadingNextPage: false,
-        count: action.payload.count,
+        count: action.payload.count ?? (action.payload.data.length ? result.length + 1 : state.data.length),
       };
     case 'FETCH_FAILURE':
       return {
@@ -64,8 +65,6 @@ const initialState = {
 };
 
 const useInfiniteFetchApi = ({ apiConfig: initialApiConfig, formatData }: any) => {
-  const cancelled = useRef(false);
-
   const [state, dispatch] = useReducer(fetchReducer, initialState);
 
   const [apiConfig, setApiConfig] = useState(initialApiConfig);
@@ -82,12 +81,12 @@ const useInfiniteFetchApi = ({ apiConfig: initialApiConfig, formatData }: any) =
     try {
       const updatedApiConfig = {
         ...apiConfig,
-        params: { ...apiConfig.params, page: Math.floor(state.data.length / SEARCH_LIMIT) + 1 },
+        params: { ...apiConfig.params, page: Math.floor(state.data.length / PER_PAGE) + 1 },
       };
       const { data } = await axiosInstance(updatedApiConfig);
-      if (!cancelled.current) dispatch({ type: 'NEXT_PAGE_FETCH_SUCCESS', payload: { ...formatData(data) } });
+      dispatch({ type: 'NEXT_PAGE_FETCH_SUCCESS', payload: { ...formatData(data) } });
     } catch (err) {
-      if (!cancelled.current) dispatch({ type: 'FETCH_FAILURE', payload: err });
+      dispatch({ type: 'FETCH_FAILURE', payload: err });
     }
   };
 
@@ -96,19 +95,14 @@ const useInfiniteFetchApi = ({ apiConfig: initialApiConfig, formatData }: any) =
     dispatch({ type: 'FETCH_INIT' });
     try {
       const { data } = await axiosInstance(apiConfig);
-      if (!cancelled.current) dispatch({ type: 'FETCH_SUCCESS', payload: formatData(data) });
+      dispatch({ type: 'FETCH_SUCCESS', payload: formatData(data) });
     } catch (err) {
-      if (!cancelled.current) dispatch({ type: 'FETCH_FAILURE', payload: err });
+      dispatch({ type: 'FETCH_FAILURE', payload: err });
     }
   };
 
   useEffect(() => {
-    cancelled.current = false;
     fetchData();
-
-    return () => {
-      cancelled.current = true;
-    };
   }, [apiConfig]);
 
   return { state, reset, setApiConfig, fetchNextPage };

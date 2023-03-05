@@ -5,10 +5,12 @@ import Search from '@/screens/Search';
 import RepoDetail from '@/screens/RepoDetail';
 import IssueDetail from '@/screens/IssueDetail';
 
+import { Repository } from '@/types';
+
 export type RootStackParamList = {
   Home: undefined;
   Search: undefined;
-  RepoDetail: { repo: string; owner: string };
+  RepoDetail: { item: Repository };
   IssueDetail: { repo: string; owner: string; issue: number };
 };
 

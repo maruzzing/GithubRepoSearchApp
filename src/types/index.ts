@@ -13,3 +13,13 @@ export type Repository = {
   stargazers_count: number;
   language: string;
 };
+
+export type Issue = {
+  id: number;
+  node_id: string;
+  number: number;
+  title: string;
+  comments: number;
+  created_at: Date;
+  state: 'open' | 'closed';
+};

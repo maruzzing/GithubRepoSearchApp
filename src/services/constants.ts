@@ -1,1 +1,1 @@
-export const SEARCH_LIMIT = 20;
+export const PER_PAGE = 20;

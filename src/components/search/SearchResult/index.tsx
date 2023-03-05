@@ -14,7 +14,8 @@ import useInfiniteFetchApi from '@/hooks/useInfiniteFetchApi';
 
 import { Repository } from '@/types';
 
-import { SEARCH_LIMIT } from '@/services/constants';
+import { PER_PAGE } from '@/services/constants';
+
 import { RootStackParamList } from '@/navigation/RootNavigation';
 
 const NextPageSpinner = styled(Spinner)`
@@ -37,18 +38,18 @@ const EmptyContainer = styled.View`
 const SEARCH_API_CONFIG = {
   url: '/search/repositories',
   params: {
-    per_page: SEARCH_LIMIT,
+    per_page: PER_PAGE,
   },
 };
 
 export type SearchResultRef = { search: (q: string) => void };
 
-const SearchResult = forwardRef<SearchResultRef>((_, ref) => {
+const SearchResult = forwardRef<SearchResultRef, { searched: boolean }>(({ searched }, ref) => {
   const navigation = useNavigation<StackNavigationProp<RootStackParamList>>();
   const { bottom: paddingBottom } = useSafeAreaInsets();
 
   const { state, setApiConfig, fetchNextPage } = useInfiniteFetchApi({
-    formatData: (d: { items: Repository; total_count: number }) => ({ data: d.items, count: d.total_count }),
+    formatData: (d: { items: Array<Repository>; total_count: number }) => ({ data: d.items, count: d.total_count }),
   });
 
   useImperativeHandle(ref, () => ({
@@ -58,12 +59,7 @@ const SearchResult = forwardRef<SearchResultRef>((_, ref) => {
   }));
 
   const renderItem = useCallback(({ item }: { item: Repository }) => {
-    return (
-      <RepositoryItem
-        onPress={() => navigation.navigate('RepoDetail', { repo: item.name, owner: item.owner.login })}
-        item={item}
-      />
-    );
+    return <RepositoryItem onPress={() => navigation.navigate('RepoDetail', { item })} item={item} />;
   }, []);
 
   const ListFooterComponent = useCallback(() => {
@@ -80,6 +76,7 @@ const SearchResult = forwardRef<SearchResultRef>((_, ref) => {
     );
   }, [state.loading]);
 
+  if (!searched) return null;
   return (
     <>
       <FlatList

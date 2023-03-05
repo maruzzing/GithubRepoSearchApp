@@ -69,7 +69,8 @@ const Search = () => {
           <SearchTextInput onSubmit={onSubmit} autoFocus onChangeText={handleChangeText} ref={searchInputRef} />
         </InputContainer>
       </SearchContainer>
-      {searched ? <SearchResult ref={searchResultViewRef} /> : <RecentKeywords onPressItem={handleSearch} />}
+      <SearchResult ref={searchResultViewRef} searched={searched} />
+      {!searched && <RecentKeywords onPressItem={handleSearch} />}
     </Container>
   );
 };

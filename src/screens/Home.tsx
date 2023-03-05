@@ -11,6 +11,7 @@ import Card from '@/components/common/Card';
 import Button from '@/components/common/Button';
 import Divider from '@/components/common/Divider';
 import RepositoryItem from '@/components/RepositoryItem';
+import PageTemplate from '@/components/layout/PageTemplate';
 
 import { RootStackParamList } from '@/navigation/RootNavigation';
 
@@ -18,11 +19,6 @@ import { RootState, useAppDispatch, useAppSelector } from '@/store';
 import { getRepositories } from '@/store/reducers/repositorySlice';
 
 import { Repository } from '@/types';
-
-const Container = styled.View`
-  flex: 1;
-  background-color: ${props => props.theme.color.background};
-`;
 
 const ContentScrollView = styled.ScrollView``;
 
@@ -59,7 +55,7 @@ const RepositoryContainer = styled.View`
 export type HomeScreenProps = StackScreenProps<RootStackParamList, 'Home'>;
 
 const Home = ({ navigation }: HomeScreenProps) => {
-  const { top: paddingTop, bottom: paddingBottom } = useSafeAreaInsets();
+  const { bottom: paddingBottom } = useSafeAreaInsets();
   const { data, loading, error } = useAppSelector((state: RootState) => state.repositories);
   const dispatch = useAppDispatch();
 
@@ -72,10 +68,7 @@ const Home = ({ navigation }: HomeScreenProps) => {
       return (
         <Fragment key={item.node_id}>
           {!!index && <Divider />}
-          <RepositoryItem
-            onPress={() => navigation.navigate('RepoDetail', { repo: item.name, owner: item.owner.login })}
-            item={item}
-          />
+          <RepositoryItem onPress={() => navigation.navigate('RepoDetail', { item })} item={item} />
         </Fragment>
       );
     },
@@ -87,7 +80,7 @@ const Home = ({ navigation }: HomeScreenProps) => {
   }, []);
 
   return (
-    <Container style={{ paddingTop }}>
+    <PageTemplate>
       <ContentScrollView contentContainerStyle={{ paddingHorizontal: 20, paddingBottom }}>
         <TitleSection>
           <PageTitle typography="title">Home</PageTitle>
@@ -111,7 +104,7 @@ const Home = ({ navigation }: HomeScreenProps) => {
           )}
         </View>
       </ContentScrollView>
-    </Container>
+    </PageTemplate>
   );
 };
 
