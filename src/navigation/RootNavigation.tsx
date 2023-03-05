@@ -10,8 +10,12 @@ import { Repository, Issue } from '@/types';
 export type RootStackParamList = {
   Home: undefined;
   Search: undefined;
-  RepoDetail: { item: Repository };
-  IssueDetail: { url: Issue['html_url'] };
+  RepoDetail: {
+    item:
+      | Repository
+      | { node_id?: Repository['node_id']; name: Repository['name']; owner: { login: Repository['owner']['login'] } };
+  };
+  IssueDetail: { htmlUrl: Issue['html_url']; repositoryUrl: Issue['repository_url'] };
 };
 
 const Stack = createStackNavigator<RootStackParamList>();

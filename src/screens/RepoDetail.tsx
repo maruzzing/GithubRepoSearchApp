@@ -12,8 +12,10 @@ import Spinner from '@/components/common/Spinner';
 import InfiniteScrollFlatList from '@/components/layout/InfiniteScrollFlatList';
 
 import useInfiniteFetchApi from '@/hooks/useInfiniteFetchApi';
+import useFetchApi from '@/hooks/useFetchApi';
 
 import { PER_PAGE } from '@/services/constants';
+import { getRepositoryDetail } from '@/services';
 
 import { Issue } from '@/types';
 
@@ -49,15 +51,26 @@ const RepoDetail = ({ route, navigation }: RepoDetailProps) => {
     apiConfig: apiConfig,
   });
 
-  const ListHeaderComponent = useCallback(() => <RepositoryItem item={item} isListItem={false} />, [item]);
+  const { state: repoDetailState } = useFetchApi({
+    initialData: {},
+    fetchApi: item.node_id ? undefined : () => getRepositoryDetail({ owner: item.owner.login, repo: item.name }),
+  });
+
+  const ListHeaderComponent = useCallback(() => {
+    const repoDetail = item.node_id ? item : repoDetailState.data;
+    if (!repoDetail.node_id) return null;
+
+    return <RepositoryItem item={repoDetail} isListItem={false} />;
+  }, [item, repoDetailState.data]);
 
   const renderIssue = useCallback(({ item: issue }: { item: Issue }) => {
     return (
       <IssueItem
         item={issue}
         onPress={() =>
-          navigation.navigate('IssueDetail', {
-            url: issue.html_url,
+          navigation.push('IssueDetail', {
+            htmlUrl: issue.html_url,
+            repositoryUrl: issue.repository_url,
           })
         }
       />
@@ -75,7 +88,7 @@ const RepoDetail = ({ route, navigation }: RepoDetailProps) => {
         emptyMessage="등록된 이슈가 없어요"
         {...state}
       />
-      {state.loading && <StyledSpinner />}
+      {(repoDetailState.loading || state.loading) && <StyledSpinner />}
     </PageTemplate>
   );
 };

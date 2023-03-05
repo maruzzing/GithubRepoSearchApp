@@ -47,6 +47,7 @@
 		81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = LaunchScreen.storyboard; path = GithubRepoSearchApp/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		89C6BE57DB24E9ADA2F236DE /* Pods-GithubRepoSearchApp-GithubRepoSearchAppTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-GithubRepoSearchApp-GithubRepoSearchAppTests.release.xcconfig"; path = "Target Support Files/Pods-GithubRepoSearchApp-GithubRepoSearchAppTests/Pods-GithubRepoSearchApp-GithubRepoSearchAppTests.release.xcconfig"; sourceTree = "<group>"; };
 		ED297162215061F000B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = System/Library/Frameworks/JavaScriptCore.framework; sourceTree = SDKROOT; };
+		FA21789F29B4D129001FFAF1 /* Octicons.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = Octicons.ttf; path = "../../node_modules/react-native-vector-icons/Fonts/Octicons.ttf"; sourceTree = "<group>"; };
 		FA48F02929B2FC8E0041A46A /* NotoSansKR-Bold.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "NotoSansKR-Bold.otf"; sourceTree = "<group>"; };
 		FA48F02A29B2FC8E0041A46A /* NotoSansKR-Medium.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "NotoSansKR-Medium.otf"; sourceTree = "<group>"; };
 		FA48F02B29B2FC8E0041A46A /* NotoSansKR-Regular.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "NotoSansKR-Regular.otf"; sourceTree = "<group>"; };
@@ -161,6 +162,7 @@
 			children = (
 				FA48F02929B2FC8E0041A46A /* NotoSansKR-Bold.otf */,
 				FA48F02F29B2FD420041A46A /* Ionicons.ttf */,
+				FA21789F29B4D129001FFAF1 /* Octicons.ttf */,
 				FA48F02A29B2FC8E0041A46A /* NotoSansKR-Medium.otf */,
 				FA48F02B29B2FC8E0041A46A /* NotoSansKR-Regular.otf */,
 			);

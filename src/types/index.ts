@@ -23,4 +23,5 @@ export type Issue = {
   created_at: Date;
   state: 'open' | 'closed';
   html_url: string;
+  repository_url: string;
 };

@@ -5,6 +5,10 @@ export const searchRepositories = ({ q, page }: { q: string; page: number }) => 
   return axiosInstance.get(`/search/repositories`, { params: { q, page, per_page: PER_PAGE } });
 };
 
+export const getRepositoryDetail = ({ owner, repo }: { owner: string; repo: string }) => {
+  return axiosInstance.get(`/repos/${owner}/${repo}`);
+};
+
 export const getRepositoryIssues = ({ owner, repo, page }: { owner: string; repo: string; page: number }) => {
   return axiosInstance.get(`/repos/${owner}/${repo}/issues`, { params: { page, per_page: PER_PAGE, state: 'all' } });
 };
