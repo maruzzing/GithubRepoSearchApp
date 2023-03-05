@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { Alert } from 'react-native/types';
+import { Alert } from 'react-native';
 
 export const axiosInstance = axios.create({
   baseURL: 'https://api.github.com',
@@ -16,7 +16,7 @@ axiosInstance.interceptors.response.use(
   async error => {
     if (error.response?.status === 403) {
       return new Promise(resolve => {
-        Alert.alert('요청 허용 한도를 초과했습니다.', '나중에 다시 만나요!', [{ text: '확인', onPress: resolve }]);
+        Alert.alert('요청 허용 한도를 초과했어요', '나중에 다시 만나요!', [{ text: '확인', onPress: resolve }]);
       });
     }
     return Promise.reject(error);
