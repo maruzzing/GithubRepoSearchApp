@@ -3,12 +3,13 @@ import { useTheme } from 'styled-components';
 import { WebView } from 'react-native-webview';
 import { StackScreenProps } from '@react-navigation/stack';
 import styled from 'styled-components/native';
-import { Alert } from 'react-native';
+import { Alert, Linking, Pressable } from 'react-native';
 
 import { RootStackParamList } from '@/navigation/RootNavigation';
 
 import PageTemplate from '@/components/layout/PageTemplate';
 import Spinner from '@/components/common/Spinner';
+import Icon from '@/components/common/Icon';
 
 export type IssueDetailProps = StackScreenProps<RootStackParamList, 'IssueDetail'>;
 
@@ -28,8 +29,19 @@ const IssueDetail = ({ route }: IssueDetailProps) => {
 
   const [loading, setLoading] = useState(true);
 
+  const handlePressOpenBrowser = () => {
+    Linking.openURL(url);
+  };
+
   return (
-    <PageTemplate hasAppBar hasHistory>
+    <PageTemplate
+      hasAppBar
+      hasHistory
+      RightComponent={
+        <Pressable onPress={handlePressOpenBrowser}>
+          <Icon name="open-outline" size={24} />
+        </Pressable>
+      }>
       <WebView
         source={{ uri: url }}
         style={{ flex: 1, paddingHorizontal: space.layout }}
