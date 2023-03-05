@@ -1,12 +1,11 @@
 import { useCallback } from 'react';
 import styled from 'styled-components/native';
-import { FlatList, Pressable } from 'react-native';
-import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { Pressable } from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
 
 import TouchableHighlight from '@/components/common/TouchableHighlight';
 import Text from '@/components/common/Text';
-import Divider from '@/components/common/Divider';
+import InfiniteScrollFlatList from '@/components/layout/InfiniteScrollFlatList';
 
 import { RootState, useAppDispatch, useAppSelector } from '@/store';
 import { updateSearchKeyword } from '@/store/reducers/searchSlice';
@@ -31,7 +30,6 @@ const Keyword = styled(Text)`
 `;
 
 const RecentKeywords = ({ onPressItem }: { onPressItem: (q: string) => void }) => {
-  const { bottom: paddingBottom } = useSafeAreaInsets();
   const dispatch = useAppDispatch();
 
   const { recentSearchKeywords } = useAppSelector((state: RootState) => state.search);
@@ -56,15 +54,12 @@ const RecentKeywords = ({ onPressItem }: { onPressItem: (q: string) => void }) =
     return <Title typography="subtitle1">최근 검색어</Title>;
   };
 
-  if (!recentSearchKeywords.length) return null;
   return (
-    <FlatList
-      contentContainerStyle={{ flexGrow: 1, paddingBottom }}
+    <InfiniteScrollFlatList
       data={recentSearchKeywords}
       renderItem={renderItem}
       keyExtractor={item => item}
-      ListHeaderComponent={ListHeaderComponent}
-      ItemSeparatorComponent={Divider}
+      ListHeaderComponent={recentSearchKeywords.length && ListHeaderComponent}
     />
   );
 };
