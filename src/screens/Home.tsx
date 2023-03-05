@@ -3,8 +3,8 @@ import { View, Pressable } from 'react-native';
 import styled from 'styled-components/native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { StackScreenProps } from '@react-navigation/stack';
-import Icon from 'react-native-vector-icons/Ionicons';
 
+import Icon from '@/components/common/Icon';
 import Text from '@/components/common/Text';
 import SearchTextInput from '@/components/common/SearchTextInput';
 import Spinner from '@/components/common/Spinner';
@@ -58,7 +58,6 @@ const EmptyText = styled(Text)`
 `;
 
 const ErrorIcon = styled(Icon)`
-  color: ${props => props.theme.color.mono1};
   margin-bottom: ${props => props.theme.space.scale(1)}px;
 `;
 

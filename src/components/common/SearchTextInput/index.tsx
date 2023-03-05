@@ -1,8 +1,9 @@
 import { forwardRef, useState, useRef, useImperativeHandle } from 'react';
-import { Pressable, NativeSyntheticEvent, TextInputSubmitEditingEventData, Platform } from 'react-native';
+import { Pressable, NativeSyntheticEvent, TextInputSubmitEditingEventData } from 'react-native';
 import styled from 'styled-components/native';
-import Icon from 'react-native-vector-icons/Ionicons';
 import { useTheme } from 'styled-components';
+
+import Icon from '@/components/common/Icon';
 
 import { TextInput as RNTextInput, TextInputProps as RNTextInputProps } from 'react-native';
 
@@ -34,14 +35,6 @@ const StyledTextInput = styled(RNTextInput)`
 
 const SearchIconContainer = styled.Pressable`
   margin-left: ${props => props.theme.space.scale(1)}px;
-`;
-
-const SearchIcon = styled(Icon)`
-  color: ${props => props.theme.color.mono2};
-`;
-
-const ClearIcon = styled(Icon)`
-  color: ${props => props.theme.color.mono4};
 `;
 
 const Rect = styled.View`
@@ -94,7 +87,7 @@ const SearchTextInput = forwardRef<SearchTextInputRef, TextInputProps>(
         <ClearButtonContainer>
           {!!value ? (
             <Pressable onPress={() => inputRef.current?.clear()} hitSlop={8}>
-              <ClearIcon name="close-circle" size={CLEAR_ICON_SIZE} />
+              <Icon name="close-circle" size={CLEAR_ICON_SIZE} color="mono4" />
             </Pressable>
           ) : (
             <Rect />
@@ -105,7 +98,7 @@ const SearchTextInput = forwardRef<SearchTextInputRef, TextInputProps>(
             onSubmit?.(value);
           }}
           hitSlop={8}>
-          <SearchIcon name="search" size={20} />
+          <Icon name="search" size={20} color="mono2" />
         </SearchIconContainer>
       </Container>
     );

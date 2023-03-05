@@ -1,8 +1,8 @@
 import styled from 'styled-components/native';
-import Icon from 'react-native-vector-icons/Ionicons';
 
 import TouchableHighlight, { TouchableHighlightProps } from '@/components/common/TouchableHighlight';
 import Text from '@/components/common/Text';
+import Icon from '@/components/common/Icon';
 
 import type { Issue } from '@/types';
 import { getDateDiffFromNow } from '@/utils/dateFormatter';

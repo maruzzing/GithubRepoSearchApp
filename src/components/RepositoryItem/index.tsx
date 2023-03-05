@@ -1,11 +1,11 @@
 import { useMemo } from 'react';
 import styled from 'styled-components/native';
-import Icon from 'react-native-vector-icons/Ionicons';
 import { View } from 'react-native';
 
 import TouchableHighlight, { TouchableHighlightProps } from '@/components/common/TouchableHighlight';
 import Profile from '@/components/common/Profile';
 import Text from '@/components/common/Text';
+import Icon from '@/components/common/Icon';
 
 import type { Repository } from '@/types';
 
@@ -42,10 +42,6 @@ const BookmarkButton = styled.Pressable`
   margin-left: ${props => props.theme.space.scale(1)}px;
 `;
 
-const BookmarkIcon = styled(Icon)`
-  color: ${props => props.theme.color.mono1};
-`;
-
 const RepositoryItem = ({ item, isListItem = true, ...props }: RepositoryItemProps) => {
   const dispatch = useAppDispatch();
   const { data } = useAppSelector((state: RootState) => state.repositories);
@@ -62,7 +58,7 @@ const RepositoryItem = ({ item, isListItem = true, ...props }: RepositoryItemPro
         <ProfileRow>
           <Profile source={{ uri: item.owner.avatar_url }} name={item.owner.login} />
           <BookmarkButton onPress={handlePressBookmark}>
-            <BookmarkIcon name={isBookmarked ? 'bookmark' : 'bookmark-outline'} size={24} />
+            <Icon name={isBookmarked ? 'bookmark' : 'bookmark-outline'} size={24} />
           </BookmarkButton>
         </ProfileRow>
         <Name typography={isListItem ? 'subtitle2' : 'subtitle1'} numberOfLines={2}>

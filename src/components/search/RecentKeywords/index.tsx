@@ -1,10 +1,10 @@
 import { useCallback } from 'react';
 import styled from 'styled-components/native';
 import { Pressable } from 'react-native';
-import Icon from 'react-native-vector-icons/Ionicons';
 
 import TouchableHighlight from '@/components/common/TouchableHighlight';
 import Text from '@/components/common/Text';
+import Icon from '@/components/common/Icon';
 import InfiniteScrollFlatList from '@/components/layout/InfiniteScrollFlatList';
 
 import { RootState, useAppDispatch, useAppSelector } from '@/store';
@@ -43,7 +43,7 @@ const RecentKeywords = ({ onPressItem }: { onPressItem: (q: string) => void }) =
             {item}
           </Keyword>
           <Pressable hitSlop={8} onPress={handlePressDelete}>
-            <Icon name="close" size={16} />
+            <Icon name="close" size={16} color="mono3" />
           </Pressable>
         </>
       </KeywordItem>
