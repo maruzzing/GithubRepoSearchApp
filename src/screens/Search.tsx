@@ -66,7 +66,13 @@ const Search = () => {
       <SearchContainer>
         <StyledBackButton />
         <InputContainer pointerEvents="box-none">
-          <SearchTextInput onSubmit={onSubmit} autoFocus onChangeText={handleChangeText} ref={searchInputRef} />
+          <SearchTextInput
+            placeholder="깃헙 레포지토리 검색"
+            onSubmit={onSubmit}
+            autoFocus
+            onChangeText={handleChangeText}
+            ref={searchInputRef}
+          />
         </InputContainer>
       </SearchContainer>
       <SearchResult ref={searchResultViewRef} searched={searched} />

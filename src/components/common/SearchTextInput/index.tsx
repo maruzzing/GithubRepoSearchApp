@@ -1,7 +1,8 @@
 import { forwardRef, useState, useRef, useImperativeHandle } from 'react';
-import { Pressable, NativeSyntheticEvent, TextInputSubmitEditingEventData } from 'react-native';
+import { Pressable, NativeSyntheticEvent, TextInputSubmitEditingEventData, Platform } from 'react-native';
 import styled from 'styled-components/native';
 import Icon from 'react-native-vector-icons/Ionicons';
+import { useTheme } from 'styled-components';
 
 import { TextInput as RNTextInput, TextInputProps as RNTextInputProps } from 'react-native';
 
@@ -26,6 +27,9 @@ const StyledTextInput = styled(RNTextInput)`
   include-font-padding: false;
   width: 100%;
   flex-shrink: 1;
+  color: ${props => props.theme.color.mono1};
+  padding: 0px;
+  line-height: 19px;
 `;
 
 const SearchIconContainer = styled.Pressable`
@@ -55,6 +59,7 @@ const SearchTextInput = forwardRef<SearchTextInputRef, TextInputProps>(
   ({ value: initialValue = '', onSubmit, onChangeText, ...props }, ref) => {
     const [value, setValue] = useState(initialValue);
     const inputRef = useRef<RNTextInput>(null);
+    const { color } = useTheme();
 
     useImperativeHandle(ref, () => ({
       setValue,
@@ -81,6 +86,9 @@ const SearchTextInput = forwardRef<SearchTextInputRef, TextInputProps>(
           onChangeText={handleChangeText}
           value={value}
           ref={inputRef}
+          placeholderTextColor={color.mono3}
+          textAlignVertical="center"
+          cursorColor={color.primary}
           {...props}
         />
         <ClearButtonContainer>

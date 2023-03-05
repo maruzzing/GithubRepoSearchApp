@@ -80,6 +80,7 @@ const SearchResult = forwardRef<SearchResultRef, { searched: boolean }>(({ searc
   return (
     <>
       <FlatList
+        keyboardShouldPersistTaps="handled"
         contentContainerStyle={{ flexGrow: 1, paddingBottom }}
         data={state.data}
         renderItem={renderItem}
