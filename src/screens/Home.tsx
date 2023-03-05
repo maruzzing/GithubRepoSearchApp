@@ -18,6 +18,7 @@ import { RootStackParamList } from '@/navigation/RootNavigation';
 
 import { RootState, useAppDispatch, useAppSelector } from '@/store';
 import { getRepositories } from '@/store/reducers/repositorySlice';
+import { getSearchKeywords } from '@/store/reducers/searchSlice';
 
 import { Repository } from '@/types';
 
@@ -86,6 +87,7 @@ const Home = ({ navigation }: HomeScreenProps) => {
 
   useEffect(() => {
     dispatch(getRepositories());
+    dispatch(getSearchKeywords());
   }, []);
 
   const EmptyListComponent = () => {
