@@ -3,8 +3,9 @@ import { FlatList } from 'react-native';
 import { useTheme } from 'styled-components';
 import { StackScreenProps } from '@react-navigation/stack';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import { RootStackParamList } from '@/navigation/RootNavigation';
 import styled from 'styled-components/native';
+
+import { RootStackParamList } from '@/navigation/RootNavigation';
 
 import PageTemplate from '@/components/layout/PageTemplate';
 import RepositoryItem from '@/components/RepositoryItem';
@@ -18,8 +19,6 @@ import useInfiniteFetchApi from '@/hooks/useInfiniteFetchApi';
 import { PER_PAGE } from '@/services/constants';
 
 import { Issue } from '@/types';
-
-export type RepoDetailProps = StackScreenProps<RootStackParamList, 'RepoDetail'>;
 
 const NextPageSpinner = styled(Spinner)`
   margin-vertical: ${props => props.theme.space.scale(2)}px;
@@ -37,6 +36,8 @@ const StyledSpinner = styled(Spinner)`
   top: 0;
   bottom: 0;
 `;
+
+export type RepoDetailProps = StackScreenProps<RootStackParamList, 'RepoDetail'>;
 
 const RepoDetail = ({ route, navigation }: RepoDetailProps) => {
   const {
@@ -77,23 +78,18 @@ const RepoDetail = ({ route, navigation }: RepoDetailProps) => {
     );
   }, [state.loading]);
 
-  const renderIssue = useCallback(
-    ({ item: issue }: { item: Issue }) => {
-      return (
-        <IssueItem
-          item={issue}
-          onPress={() =>
-            navigation.navigate('IssueDetail', {
-              repo: item.name,
-              owner: item.owner.login,
-              issue: issue.number,
-            })
-          }
-        />
-      );
-    },
-    [item],
-  );
+  const renderIssue = useCallback(({ item: issue }: { item: Issue }) => {
+    return (
+      <IssueItem
+        item={issue}
+        onPress={() =>
+          navigation.navigate('IssueDetail', {
+            url: issue.html_url,
+          })
+        }
+      />
+    );
+  }, []);
 
   return (
     <PageTemplate hasAppBar hasHistory>

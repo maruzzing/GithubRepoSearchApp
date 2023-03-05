@@ -5,13 +5,13 @@ import Search from '@/screens/Search';
 import RepoDetail from '@/screens/RepoDetail';
 import IssueDetail from '@/screens/IssueDetail';
 
-import { Repository } from '@/types';
+import { Repository, Issue } from '@/types';
 
 export type RootStackParamList = {
   Home: undefined;
   Search: undefined;
   RepoDetail: { item: Repository };
-  IssueDetail: { repo: string; owner: string; issue: number };
+  IssueDetail: { url: Issue['html_url'] };
 };
 
 const Stack = createStackNavigator<RootStackParamList>();

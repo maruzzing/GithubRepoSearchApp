@@ -22,4 +22,5 @@ export type Issue = {
   comments: number;
   created_at: Date;
   state: 'open' | 'closed';
+  html_url: string;
 };
