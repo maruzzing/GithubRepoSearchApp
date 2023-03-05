@@ -3,6 +3,7 @@ import { View, Pressable } from 'react-native';
 import styled from 'styled-components/native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { StackScreenProps } from '@react-navigation/stack';
+import Icon from 'react-native-vector-icons/Ionicons';
 
 import Text from '@/components/common/Text';
 import SearchTextInput from '@/components/common/SearchTextInput';
@@ -52,6 +53,15 @@ const RepositoryContainer = styled.View`
   overflow: hidden;
 `;
 
+const EmptyText = styled(Text)`
+  text-align: center;
+`;
+
+const ErrorIcon = styled(Icon)`
+  color: ${props => props.theme.color.mono1};
+  margin-bottom: ${props => props.theme.space.scale(1)}px;
+`;
+
 export type HomeScreenProps = StackScreenProps<RootStackParamList, 'Home'>;
 
 const Home = ({ navigation }: HomeScreenProps) => {
@@ -79,6 +89,28 @@ const Home = ({ navigation }: HomeScreenProps) => {
     dispatch(getRepositories());
   }, []);
 
+  const EmptyListComponent = () => {
+    if (loading) {
+      return <StyledSpinner />;
+    } else {
+      return (
+        <EmptyMessageContainer>
+          {error ? (
+            <>
+              <ErrorIcon name="sad-outline" size={32} />
+              <EmptyText typography="body1">{'오류가 발생했어요\n잠시 후 다시 시도해 주세요.'}</EmptyText>
+            </>
+          ) : (
+            <>
+              <EmptyText typography="body1">저장된 레포지토리가 없어요</EmptyText>
+              <EmptyMessageButton priority="secondary" label="레포지토리 검색하기" onPress={handlePressSearch} />
+            </>
+          )}
+        </EmptyMessageContainer>
+      );
+    }
+  };
+
   return (
     <PageTemplate>
       <ContentScrollView contentContainerStyle={{ paddingHorizontal: 20, paddingBottom }}>
@@ -92,16 +124,7 @@ const Home = ({ navigation }: HomeScreenProps) => {
         </TitleSection>
         <Subtitle typography="subtitle1">저장된 레포지토리</Subtitle>
         <View>
-          {data.length ? (
-            <RepositoryContainer>{data.map(renderItem)}</RepositoryContainer>
-          ) : loading ? (
-            <StyledSpinner />
-          ) : (
-            <EmptyMessageContainer>
-              <Text typography="body1">저장된 레포지토리가 없어요</Text>
-              <EmptyMessageButton priority="secondary" label="레포지토리 검색하기" onPress={handlePressSearch} />
-            </EmptyMessageContainer>
-          )}
+          {!!data.length ? <RepositoryContainer>{data.map(renderItem)}</RepositoryContainer> : <EmptyListComponent />}
         </View>
       </ContentScrollView>
     </PageTemplate>
